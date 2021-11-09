@@ -13,26 +13,22 @@ var yourPlayer,
 		[0, 4, 8],
 		[2, 4, 6],
 	]
+// all the variables above
 
+
+// event listener for each of the cell
 cell.forEach(cellItem => {
 	cellItem.addEventListener('click', handleClick)
 })
 
-function restart() {
-	wrapper.style.display = 'grid'
-	cell.forEach(c => {
-		c.innerHTML = ''
-		c.classList.remove('x')
-		c.classList.remove('o')
-		c.disabled = false
-	})
-}
 
+// function to choose X or O
 function chooseYourPlayer(c) {
 	yourPlayer = c
 	wrapper.style.display = 'none'
 	span.innerHTML = isYou(true)
 }
+
 
 function isYou(boo) {
 	if (boo) {
@@ -45,7 +41,81 @@ function isYou(boo) {
 		}
 	}
 }
+// if is you, return the what you choose
 
+
+// function to restart the cell
+function restart() {
+	wrapper.style.display = 'grid'
+	cell.forEach(c => {
+		c.innerHTML = ''
+		c.classList.remove('x')
+		c.classList.remove('o')
+		c.disabled = false
+	})
+}
+
+
+// function the reset the cells after a match
+function resetCells() {
+	cell.forEach(item => {
+		item.innerHTML = ''
+		item.disabled = false
+	})
+}
+
+// function for the bot's turn
+function botTurn() {
+	cell.forEach(item => {
+		item.disabled = true
+	})
+	span.innerHTML = isYou(false)
+	setTimeout(() => {
+		botChoice()
+		cell.forEach(item => {
+			item.disabled = false
+		})
+		span.innerHTML = isYou(true)
+	}, 1500)
+}
+
+
+// function for bot to make a choice
+function botChoice() {
+	num = GenerateRandom()
+	if (!(cell[num].classList.contains('x') || cell[num].classList.contains('o'))) {
+		cell[num].innerHTML = isYou(false)
+		cell[num].classList.add(isYou(false))
+	} else {
+		botChoice()
+	}
+}
+
+
+// function to generate a random number
+function GenerateRandom() {
+	return Math.floor(Math.random() * 9)
+}
+
+// function to check is draw
+function isDraw() {
+	return [...cell].every(item => {
+		return item.classList.contains(isYou(true)) || item.classList.contains(isYou(false))
+	})
+}
+
+
+// to check is you win or lose
+function isFinish(player) {
+	return winingCombos.some(combo => {
+		return combo.every(itemNum => {
+			return cell[itemNum].classList.contains(player)
+		})
+	})
+}
+
+
+// function to use when click on the cell
 function handleClick() {
 	if (!(this.classList.contains('x') || this.classList.contains('o'))) {
 		item = this
@@ -69,55 +139,3 @@ function handleClick() {
 		}
 	}
 }
-
-function isDraw() {
-	return [...cell].every(item => {
-		return item.classList.contains(isYou(true)) || item.classList.contains(isYou(false))
-	})
-}
-
-function resetCells() {
-	cell.forEach(item => {
-		item.innerHTML = ''
-		item.disabled = false
-	})
-}
-
-function botTurn() {
-	cell.forEach(item => {
-		item.disabled = true
-	})
-	span.innerHTML = isYou(false)
-	setTimeout(() => {
-		botChoice()
-		cell.forEach(item => {
-			item.disabled = false
-		})
-		span.innerHTML = isYou(true)
-	}, 1500)
-}
-
-function botChoice() {
-	num = GenerateRandom()
-	if (!(cell[num].classList.contains('x') || cell[num].classList.contains('o'))) {
-		cell[num].innerHTML = isYou(false)
-		cell[num].classList.add(isYou(false))
-	} else {
-		botChoice()
-	}
-}
-
-function GenerateRandom() {
-	return Math.floor(Math.random() * 9)
-}
-
-function isFinish(player) {
-	return winingCombos.some(combo => {
-		return combo.every(itemNum => {
-			return cell[itemNum].classList.contains(player)
-		})
-	})
-}
-
-//ANCHOR: well done, keep working
-// NOTE : isFinish; win or lose or draw
