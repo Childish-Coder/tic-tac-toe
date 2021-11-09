@@ -44,6 +44,27 @@ function isYou(boo) {
 // if is you, return the what you choose
 
 
+// add hover affect on cell
+cell.forEach(item => {
+	item.addEventListener('mouseenter', () => {
+		if (!(item.classList.contains('x') || item.classList.contains('o'))) {
+			item.innerHTML = isYou(true)
+			item.classList.add('h')
+		}
+	})
+})
+
+cell.forEach(item => {
+	item.addEventListener('mouseout', () => {
+		if (!(item.classList.contains('x') || item.classList.contains('o'))) {
+			item.innerHTML = ''
+			item.classList.remove('h')
+		}
+	})
+})
+// remove hover affcet on cell
+
+
 // function to restart the cell
 function restart() {
 	wrapper.style.display = 'grid'
@@ -122,6 +143,7 @@ function handleClick() {
 		item.disabled = true
 		item.innerHTML = isYou(true)
 		item.classList.add(isYou(true))
+		item.classList.remove('h')
 		if (isFinish(isYou(false))) {
 			alert(`You lose against ${isYou(false)}`)
 			resetCells()
